@@ -14,14 +14,55 @@
 <body>
     <div class="container" id="cat-container" style="width:75%; margin: 1rem auto;text-align: center;">
         <img id="cat-image" src="" alt="un gato">
-        <button id="get-cat" style="margin-top: 1rem;">Nuevo Gato</button>
+        <button id="get-cat" style="margin-top: 1rem;">Nuevo Animal</button>
+
+        <select name="animal-selector" id="animal">
+            <option>Selection your animal:</option>
+            <option value="cat">Cat</option>
+            <option value="dog">Dog</option>
+        </select>
+
     </div>
+
+
     <div class="container">
-        <h2 id="width">Width: <span></span></h2>
-        <h2 id="height">Height: <span></span></h2>
+        <h2 id="width">Width: <span> </span></h2>
+        <h2 id="height">Height: <span> </span></h2>
     </div>
+
     <script>
-        // Suerte !
+        // Suerte ! 
+        const button = document.getElementById("get-cat");
+        const width = document.querySelector("#width span");
+        const height = document.querySelector("#height span");
+        const image = document.getElementById("cat-image");
+
+        button.addEventListener("click", async () => {
+            const animal = await getAnimal();
+
+            image.src = `${animal.url}`;
+            image.width = `${animal.width}`;
+            image.height = `${animal.height}`;
+
+            height.textContent = animal.height;
+            width.textContent = animal.width;
+        })
+
+        async function getAnimal() {
+            const selectedAnimal = document.getElementById("animal").value;
+            let apiUrl = "";
+
+            if (selectedAnimal === "cat") {
+                apiUrl = "https://api.thecatapi.com/v1/images/search";
+            } else if (selectedAnimal === "dog") {
+                apiUrl = "https://api.thedogapi.com/v1/images/search";
+            }
+
+            const response = await fetch(apiUrl);
+            const data = await response.json();
+            return data[0];
+        }
+
     </script>
 </body>
 
